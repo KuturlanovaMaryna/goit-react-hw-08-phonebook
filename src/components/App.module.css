@@ -1,0 +1,13 @@
+.appContainer{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.searchText{
+    font-size: 20px;
+    font-weight: 700;
+
+}
