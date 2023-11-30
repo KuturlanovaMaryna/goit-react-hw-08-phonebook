@@ -1,33 +1,34 @@
-import React, { useEffect } from 'react';
-import ContactForm from './ContactForm/ContactForm';
-import Search from './Search/Search';
-import ContactList from './ContactList/ContactList';
+import React, { lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import css from './App.module.css';
-import Loader from './Loader/Loader';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllContacts } from 'redux/phone.reduser';
-import { selectIsLoading, selectError } from 'redux/phone.selectors';
+import { Layout } from './Layout/Layout';
+
+const Home = lazy(() => import('pages/HomePage'));
+const Registrated = lazy(() => import('pages/RegistratedPage'));
+const LogIn = lazy(() => import('pages/LogInPage'));
+const Contacts = lazy(() => import('pages/ContactsPage'));
+
 const App = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const isLoading = useSelector(selectIsLoading);
-  const errorMassege = useSelector(selectError);
+  // const isLoading = useSelector(selectIsLoading);
+  // const errorMassege = useSelector(selectError);
 
-  useEffect(() => {
-    dispatch(fetchAllContacts());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAllContacts());
+  // }, [dispatch]);
 
   return (
     <div className={css.appContainer}>
-      <h1 className={css.titleText}>Phone book</h1>
-      <ContactForm />
-      <p className={css.searchText}>Find contacts by name</p>
-      <Search />
-      {isLoading && <Loader />}
-      {errorMassege && (
-        <div>Something went wrong. Error messege: {errorMassege}</div>
-      )}
-      <ContactList />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/register" element={<Registrated />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/contacts" element={<Contacts />} />
+        </Route>
+        <Route path="*" element={<Home />} />
+      </Routes>
     </div>
   );
 };
