@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/122.773af47c.chunk.js","mappings":"iKAMA,UAJwB,WACtB,OAAO,yBAAK,mBACb,C","sources":["pages/RegistratedPage.jsx"],"sourcesContent":["import React from 'react';\n\nconst RegistratedPage = () => {\n  return <div>RegistratedPage</div>;\n};\n\nexport default RegistratedPage;\n"],"names":[],"sourceRoot":""}
