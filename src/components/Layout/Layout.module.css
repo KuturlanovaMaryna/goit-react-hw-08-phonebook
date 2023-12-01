@@ -1,0 +1,21 @@
+.header {
+
+   
+   
+    gap: 40px;
+margin-top: 0;
+    margin-bottom: 70px;
+    background-color: transparent;
+}
+
+.navLink {
+    text-decoration: none;
+    color: #C5C6C7;
+    background-color: rgb(31, 40, 51);
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgb(31, 40, 51, 0.5);
+    transition: all 0.3s;
+    display: inline-flex;
+}

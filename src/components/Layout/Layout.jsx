@@ -14,7 +14,7 @@ export const Layout = () => {
           Contacts
         </NavLink>
         <NavLink className={css.navLink} to="/register">
-          register
+          Register
         </NavLink>
         <NavLink className={css.navLink} to="/login">
           Login
