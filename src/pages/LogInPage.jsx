@@ -12,7 +12,7 @@ const LogInPage = () => {
           name="userEmail"
         />
       </label>
-      <label>
+      {/* <label>
         <p>Password:</p>
         <input
           type="password"
@@ -21,7 +21,7 @@ const LogInPage = () => {
           name="userPassword"
           minLength={7}
         />
-      </label>
+      </label> */}
       <br />
       <button type="submit">Sign In</button>
     </form>
