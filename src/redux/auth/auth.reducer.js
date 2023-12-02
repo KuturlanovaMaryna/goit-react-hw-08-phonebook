@@ -2,16 +2,19 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import { isAnyOf } from "@reduxjs/toolkit";
 
-// axios.defaults.baseURL = `https://connections-api.herokuapp.com`;
+export const instance = axios.create({
+  baseURL: 'https://connections-api.herokuapp.com',
+});
 
 const setToken = token => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
+
 export const loginThunk = createAsyncThunk(
-  'auth/Login',
+  'auth/login',
   async (formData, thunkApi) => {
     try {
-      const { data } = await axios.post(`https://connections-api.herokuapp.com/users/login`, formData)
+      const { data } = await instance.post('/users/login', formData)
       setToken(data.token);
       return data
     } catch (err) {
@@ -21,10 +24,10 @@ export const loginThunk = createAsyncThunk(
   }
 )
 export const registerThunk = createAsyncThunk(
-  'auth/Register',
+  'auth/register',
   async (formData, thunkApi) => {
     try {
-      const { data } = await axios.post(`https://connections-api.herokuapp.com/users/signup`, formData)
+      const { data } = await instance.post('/users/signup', formData)
       setToken(data.token);
       return data
     } catch (err) {
@@ -47,10 +50,8 @@ const initialState = {
 const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {
-    
-    },
-     extraReducers: builder =>
+    reducers: { },
+    extraReducers: builder =>
          builder
         .addCase(loginThunk.fulfilled, (state, { payload }) => {
             state.isLoading = false;
