@@ -1,43 +1,39 @@
-import { createSlice} from "@reduxjs/toolkit";
-// import axios from "axios";
+import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import axios from "axios";
+import { isAnyOf } from "@reduxjs/toolkit";
 
-// export const fetchAllContacts = createAsyncThunk(
-//   'contacts/getContacts',
-//   async (_, thunkApi) => {
-//     try {
-//       const { data } = await axios.get(`https://655e44c19f1e1093c59ad4be.mockapi.io/contacts`)
-//       console.log('data:',data)
-//       return data
-//     } catch (err) {
+// axios.defaults.baseURL = `https://connections-api.herokuapp.com`;
+
+const setToken = token => {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+export const loginThunk = createAsyncThunk(
+  'auth/Login',
+  async (formData, thunkApi) => {
+    try {
+      const { data } = await axios.post(`https://connections-api.herokuapp.com/users/login`, formData)
+      setToken(data.token);
+      return data
+    } catch (err) {
      
-//       return thunkApi.rejectWithValue(err.message)
-//     }
-//   }
-// )
+      return thunkApi.rejectWithValue(err.message)
+    }
+  }
+)
+export const registerThunk = createAsyncThunk(
+  'auth/Register',
+  async (formData, thunkApi) => {
+    try {
+      const { data } = await axios.post(`https://connections-api.herokuapp.com/users/signup`, formData)
+      setToken(data.token);
+      return data
+    } catch (err) {
+     
+      return thunkApi.rejectWithValue(err.message)
+    }
+  }
+)
 
-// export const fetchAddContact = createAsyncThunk(
-//   'contacts/addContact',
-//   async (contact, thunkApi) => {
-//     try {
-//       const { data } = await axios.post(`https://655e44c19f1e1093c59ad4be.mockapi.io/contacts/`, contact);
-//       return data;
-//     } catch (err) {
-//       return thunkApi.rejectWithValue(err.message);
-//     }
-//   }
-// );
-
-// export const fetchDeleteContact = createAsyncThunk(
-//   'contacts/deleteContact',
-//   async (contactId, thunkApi) => {
-//     try {
-//       const { data } = await axios.delete(`https://655e44c19f1e1093c59ad4be.mockapi.io/contacts/${contactId}`);
-//       return data;
-//     } catch (err) {
-//       return thunkApi.rejectWithValue(err.message);
-//     }
-//   }
-// )
 
 const initialState = {
     isAuth:false,
@@ -54,7 +50,40 @@ const authSlice = createSlice({
     reducers: {
     
     },
-
+     extraReducers: builder =>
+         builder
+        .addCase(loginThunk.fulfilled, (state, { payload }) => {
+            state.isLoading = false;
+            state.isAuth = true;
+            state.token = payload.token;
+            state.userData = payload.user;
+        })
+        .addCase(registerThunk.fulfilled, (state, { payload }) => {
+            state.isLoading = false;
+            state.isAuth = true;
+            state.token = payload.token;
+            state.userData = payload.user;
+      })
+       
+      .addMatcher(
+        isAnyOf(
+          loginThunk.pending,
+          
+        ),
+        state => {
+           state.isLoading = true;
+           state.error = null;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          loginThunk.rejected
+        ),
+          (state, { payload }) => {
+              state.isLoading = false;
+              state.error = payload;
+          }
+      ),
 })
 // Редюсер слайсуtasksSlice
 export const authReducer = authSlice.reducer;
