@@ -1,7 +1,9 @@
-import React, { lazy } from 'react';
+import React, { lazy, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import css from './App.module.css';
 import { Layout } from './Layout/Layout';
+import { useDispatch } from 'react-redux';
+import { refreshThunk } from '../redux/auth/auth.reducer';
 
 const Home = lazy(() => import('pages/HomePage'));
 const Registrated = lazy(() => import('pages/RegistratedPage'));
@@ -9,14 +11,11 @@ const LogIn = lazy(() => import('pages/LogInPage'));
 const Contacts = lazy(() => import('pages/ContactsPage'));
 
 const App = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const isLoading = useSelector(selectIsLoading);
-  // const errorMassege = useSelector(selectError);
-
-  // useEffect(() => {
-  //   dispatch(fetchAllContacts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(refreshThunk());
+  }, [dispatch]);
 
   return (
     <div className={css.appContainer}>
