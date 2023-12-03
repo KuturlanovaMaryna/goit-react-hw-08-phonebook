@@ -7,6 +7,7 @@ export const instance = axios.create({
 });
 
 const setToken = token => {
+
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
@@ -59,6 +60,19 @@ export const refreshThunk = createAsyncThunk(
     },
   }
 );
+export const logoutThunk = createAsyncThunk(
+  'auth/logout',
+  async (_, thunkApi) => {
+    try {
+      const { data } = await instance.post('/users/logout')
+    
+      return data
+    } catch (err) {
+     
+      return thunkApi.rejectWithValue(err.message)
+    }
+  }
+)
 
 
 const initialState = {
@@ -92,6 +106,9 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.authenticated = true;
         state.userData = payload;
+         })
+         .addCase(logoutThunk.fulfilled, (state, { payload }) => {
+        return initialState
       })
        
       .addMatcher(
@@ -99,6 +116,7 @@ const authSlice = createSlice({
           loginThunk.pending,
           registerThunk.pending,
           refreshThunk.pending,
+          logoutThunk.pending,
           
         ),
         state => {
@@ -111,6 +129,7 @@ const authSlice = createSlice({
           loginThunk.rejected,
           registerThunk.pending,
           refreshThunk.pending,
+          logoutThunk.pending,
         ),
           (state, { payload }) => {
               state.isLoading = false;

@@ -20,7 +20,7 @@ export const fetchAddContact = createAsyncThunk(
   'contacts/addContact',
   async (contact, thunkApi) => {
     try {
-      const { data } = await instance.post('/contacts/', contact);
+      const { data } = await instance.post('/contacts', contact);
       return data;
     } catch (err) {
       return thunkApi.rejectWithValue(err.message);
@@ -90,9 +90,9 @@ const contactsSlice = createSlice({
           fetchDeleteContact.fulfilled,
           fetchAddContact.fulfilled
         ),
-        state => {
+        state=> {
           state.contacts.isLoading = false;
-          state.contacts.error = null;
+          
         }
       )
       .addMatcher(
