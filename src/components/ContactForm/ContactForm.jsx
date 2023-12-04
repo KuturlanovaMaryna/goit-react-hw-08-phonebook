@@ -8,7 +8,7 @@ import { selectContacts } from 'redux/phone.selectors';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
@@ -18,14 +18,14 @@ const ContactForm = () => {
   };
 
   const handlePhoneChange = e => {
-    setPhone(e.target.value);
+    setNumber(e.target.value);
   };
 
   const handleSubmit = event => {
     event.preventDefault();
     const contact = {
       name,
-      phone,
+      number,
     };
 
     if (
@@ -42,7 +42,7 @@ const ContactForm = () => {
     };
     dispatch(fetchAddContact(newContact));
     setName('');
-    setPhone('');
+    setNumber('');
   };
 
   return (
@@ -65,7 +65,7 @@ const ContactForm = () => {
         <input
           className={css.inputNumber}
           type="tel"
-          value={phone}
+          value={number}
           onChange={handlePhoneChange}
           name="number"
           pattern="\+?\d{1,4}?[.\-\s]?\(?\d{1,3}?\)?[.\-\s]?\d{1,4}[.\-\s]?\d{1,4}[.\-\s]?\d{1,9}"
