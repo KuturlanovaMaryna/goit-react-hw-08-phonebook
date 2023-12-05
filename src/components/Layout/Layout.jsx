@@ -5,6 +5,7 @@ import Loader from '../Loader/Loader';
 import css from './Layout.module.css';
 import { selectAuthenticated } from 'redux/auth/auth.selectors';
 import HomeIcon from '@mui/icons-material/Home';
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 
 export const Layout = ({ children }) => {
   const authenticated = useSelector(selectAuthenticated);
@@ -22,6 +23,7 @@ export const Layout = ({ children }) => {
 
               <NavLink className={css.navLink} to="/contacts">
                 Contacts
+                <PermContactCalendarIcon sx={{ marginLeft: 1 }} />
               </NavLink>
             </>
           ) : (
