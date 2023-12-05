@@ -1,35 +1,28 @@
 import { Suspense } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Outlet, NavLink } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import css from './Layout.module.css';
-import { selectAuthenticated, selectUserData } from 'redux/auth/auth.selectors';
-import { logoutThunk } from 'redux/auth/auth.reducer';
+import { selectAuthenticated } from 'redux/auth/auth.selectors';
+import HomeIcon from '@mui/icons-material/Home';
 
-export const Layout = () => {
-  const dispatch = useDispatch();
+export const Layout = ({ children }) => {
   const authenticated = useSelector(selectAuthenticated);
-  const userData = useSelector(selectUserData);
 
-  const onLogOut = () => {
-    dispatch(logoutThunk());
-  };
   return (
     <div>
       <Suspense fallback={<Loader />}>
         <header className={css.header}>
-          <NavLink className={css.navLink} to="/" end>
-            Home
-          </NavLink>
           {authenticated ? (
             <>
+              <NavLink className={css.navLink} to="/" end>
+                Home
+                <HomeIcon sx={{ marginLeft: 1 }} />
+              </NavLink>
+
               <NavLink className={css.navLink} to="/contacts">
                 Contacts
               </NavLink>
-              <div>
-                <span>Hello, {userData.name}!</span>{' '}
-                <button onClick={onLogOut}>Log Out</button>
-              </div>
             </>
           ) : (
             <>
@@ -42,7 +35,7 @@ export const Layout = () => {
             </>
           )}
         </header>
-
+        <main>{children}</main>
         <Outlet />
       </Suspense>
     </div>
