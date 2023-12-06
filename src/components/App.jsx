@@ -10,7 +10,7 @@ import Loader from './Loader/Loader';
 import * as ROUTES from '../constants/routs';
 import RestrictedRoute from './RestrictedRoute';
 import PrivateRoute from './PrivateRote';
-import { selectIsRefreshing, selectToken } from 'redux/auth/auth.selectors';
+import { selectIsRefreshing } from 'redux/auth/auth.selectors';
 
 const Home = lazy(() => import('pages/HomePage'));
 const Registrated = lazy(() => import('pages/RegistratedPage'));
@@ -19,16 +19,12 @@ const Contacts = lazy(() => import('pages/ContactsPage'));
 
 const App = () => {
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
+
   const isRefresh = useSelector(selectIsRefreshing);
 
   useEffect(() => {
-    if (!token) {
-      dispatch(refreshThunk());
-    }
-
     dispatch(refreshThunk());
-  }, [dispatch, token]);
+  }, [dispatch]);
 
   return (
     <div className={css.appContainer}>

@@ -45,6 +45,7 @@ export const refreshThunk = createAsyncThunk(
     if (token === null) {
       return thunkApi.rejectWithValue('Unable to fetch user'); 
     }
+      setToken(token)
     try {
    
       const { data } = await instance.get('/users/current');
