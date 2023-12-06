@@ -40,10 +40,12 @@ export const registerThunk = createAsyncThunk(
 export const refreshThunk = createAsyncThunk(
   'auth/refresh',
   async (_, thunkApi) => {
+    const state = thunkApi.getState();
+    const token = state.auth.token;
+    if (token === null) {
+      return thunkApi.rejectWithValue('Unable to fetch user'); 
+    }
     try {
-      const state = thunkApi.getState();
-      const token = state.auth.token;
-      setToken(token);
       const { data } = await instance.get('/users/current');
 
       return data;
@@ -51,14 +53,14 @@ export const refreshThunk = createAsyncThunk(
       return thunkApi.rejectWithValue(err.message);
     }
   },
-  {
-    condition: (_, thunkApi) => {
-      const state = thunkApi.getState();
-      const token = state.auth.token;
-      if (!token) return false;
-      return true;
-    },
-  }
+  // {
+  //   condition: (_, thunkApi) => {
+  //     const state = thunkApi.getState();
+  //     const token = state.auth.token;
+  //     if (!token) return false;
+  //     return true;
+  //   },
+  // }
 );
 export const logoutThunk = createAsyncThunk(
   'auth/logout',
@@ -80,7 +82,8 @@ const initialState = {
     isLoading: false,
     error: null,
     token:null,
-    userData: null,
+  userData: null,
+    isRefreshing: false,
 };
 
 
@@ -105,8 +108,15 @@ const authSlice = createSlice({
          .addCase(refreshThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.authenticated = true;
-        state.userData = payload;
+           state.userData = payload;
+            state.isRefreshing = false;
          })
+        .addCase(refreshThunk.pending, (state) => {
+        state.isRefreshing = true;
+        })
+        .addCase(  refreshThunk.rejected, (state) => {
+        state.isRefreshing = false;
+      })
          .addCase(logoutThunk.fulfilled, () => {
         return initialState
       })
@@ -115,7 +125,6 @@ const authSlice = createSlice({
         isAnyOf(
           loginThunk.pending,
           registerThunk.pending,
-          refreshThunk.pending,
           logoutThunk.pending,
           
         ),
@@ -127,9 +136,9 @@ const authSlice = createSlice({
       .addMatcher(
         isAnyOf(
           loginThunk.rejected,
-          registerThunk.pending,
-          refreshThunk.pending,
-          logoutThunk.pending,
+          registerThunk.rejected,
+        
+          logoutThunk.rejected,
         ),
           (state, { payload }) => {
               state.isLoading = false;
