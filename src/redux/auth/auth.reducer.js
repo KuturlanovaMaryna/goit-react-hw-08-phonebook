@@ -99,15 +99,15 @@ const authSlice = createSlice({
         .addCase(registerThunk.fulfilled, (state, { payload }) => {
             state.isLoading = false;
             state.isAuth = true;
-            state.token = payload.token;
-            state.userData = payload.user;
+            
+            state.userData = payload;
         })
          .addCase(refreshThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.authenticated = true;
         state.userData = payload;
          })
-         .addCase(logoutThunk.fulfilled, (state, { payload }) => {
+         .addCase(logoutThunk.fulfilled, () => {
         return initialState
       })
        
@@ -137,9 +137,8 @@ const authSlice = createSlice({
           }
       ),
 })
-// Редюсер слайсуtasksSlice
+
 export const authReducer = authSlice.reducer;
 
 
 
-// 
