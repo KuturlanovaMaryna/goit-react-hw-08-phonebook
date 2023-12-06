@@ -82,8 +82,8 @@ const initialState = {
     isLoading: false,
     error: null,
     token:null,
-  userData: null,
-    isRefreshing: false,
+    userData: null,
+    isRefreshing: true,
 };
 
 
@@ -111,9 +111,7 @@ const authSlice = createSlice({
            state.userData = payload;
             state.isRefreshing = false;
          })
-        .addCase(refreshThunk.pending, (state) => {
-        state.isRefreshing = true;
-        })
+        
         .addCase(  refreshThunk.rejected, (state) => {
         state.isRefreshing = false;
       })
@@ -125,6 +123,7 @@ const authSlice = createSlice({
         isAnyOf(
           loginThunk.pending,
           registerThunk.pending,
+          refreshThunk.pending,
           logoutThunk.pending,
           
         ),
