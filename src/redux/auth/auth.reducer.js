@@ -11,6 +11,7 @@ const setToken = token => {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
+
 export const loginThunk = createAsyncThunk(
   'auth/login',
   async (formData, thunkApi) => {
@@ -68,9 +69,9 @@ export const logoutThunk = createAsyncThunk(
   'auth/logout',
   async (_, thunkApi) => {
     try {
-      const { data } = await instance.post('/users/logout')
+     await instance.post('/users/logout')
     
-      return data
+    
     } catch (err) {
      
       return thunkApi.rejectWithValue(err.message)
@@ -108,10 +109,10 @@ const authSlice = createSlice({
             state.userData = payload;
         })
          .addCase(refreshThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.authenticated = true;
+           state.isLoading = false;
+           state.isAuth = true;
            state.userData = payload;
-            state.isRefreshing = false;
+          state.isRefreshing = false;
          })
         
         .addCase(  refreshThunk.rejected, (state) => {
@@ -138,7 +139,6 @@ const authSlice = createSlice({
         isAnyOf(
           loginThunk.rejected,
           registerThunk.rejected,
-        
           logoutThunk.rejected,
         ),
           (state, { payload }) => {

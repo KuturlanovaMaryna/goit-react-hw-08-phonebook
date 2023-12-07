@@ -33,7 +33,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route
-                path={ROUTES.HOME_ROUTE}
+                index
                 element={
                   <PrivateRoute>
                     <Home />
@@ -53,7 +53,7 @@ const App = () => {
               <Route
                 path={ROUTES.LOGIN_ROUTE}
                 element={
-                  <RestrictedRoute>
+                  <RestrictedRoute navigateTo={ROUTES.HOME_ROUTE}>
                     <LogIn />
                   </RestrictedRoute>
                 }
